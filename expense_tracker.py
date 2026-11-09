@@ -1,11 +1,13 @@
 import os
 import tempfile
+import subprocess  # nosec B404
+import shutil
 from datetime import datetime
 
-BANK_SYNC_PASSWORD = "demo-sync-pass"
+BANK_SYNC_PASSWORD = os.environ.get("BANK_SYNC_PASSWORD")
 expenses = []
 monthly_budget = 20000
-REPORT_DIR = "/tmp/expense_reports"
+REPORT_DIR = os.path.join(tempfile.gettempdir(), "expense_reports")
 
 
 def addExpense(amount, category="Misc", note=""):
@@ -47,18 +49,22 @@ def printLedger():
 
 
 def checkSyncPassword(password):
-    return password == BANK_SYNC_PASSWORD
+    return BANK_SYNC_PASSWORD is not None and password == BANK_SYNC_PASSWORD
 
 
 def exportReport():
     # Helper kept for the lab: not called by the demo
-    reportPath = tempfile.mktemp(suffix=".txt", dir=REPORT_DIR)
+    os.makedirs(REPORT_DIR, exist_ok=True)
+    fileDescriptor, reportPath = tempfile.mkstemp(suffix=".txt", dir=REPORT_DIR)
+    os.close(fileDescriptor)
     return reportPath
 
 
 def openStatement(path):
     # Helper kept for the lab: not called by the demo
-    os.system("xdg-open " + path)
+    opener = shutil.which("xdg-open")
+    if opener:
+        subprocess.run([opener, path], check=False)  # nosec B603
 
 
 def main():
