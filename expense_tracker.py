@@ -1,4 +1,4 @@
-"""Personal expense tracker: records expenses and reports on a monthly budget."""
+"""Personal expense tracker: records expenses, reports on a monthly budget."""
 import os
 import tempfile
 import subprocess  # nosec B404
@@ -12,11 +12,11 @@ budget = {"monthly": 20000}
 
 
 def add_expense(amount, category="Misc", note=""):
-    """Record an expense; reject non-positive amounts. Return True if stored."""
+    """Record an expense, rejecting amounts <= 0. Return True if kept."""
     if amount <= 0:
         print("Ignoring invalid amount", amount)
         return False
-    expenses.append({"amount" : amount, "category": category,
+    expenses.append({"amount": amount, "category": category,
                      "note": note, "time": datetime.now().isoformat()})
     return True
 
@@ -45,6 +45,7 @@ def biggest_expense():
     """Return the largest expense, or None if there are no expenses."""
     return max(expenses, key=lambda expense: expense["amount"], default=None)
 
+
 def print_ledger():
     """Print a numbered list of all expenses."""
     for number, expense in enumerate(expenses, start=1):
@@ -52,15 +53,16 @@ def print_ledger():
 
 
 def check_sync_password(password):
-    """Return True if the password matches the configured bank sync password."""
+    """Return True if the password matches the bank sync password."""
     return BANK_SYNC_PASSWORD is not None and password == BANK_SYNC_PASSWORD
 
 
 def export_report():
-    """Create an empty report file in the report directory and return its path."""
+    """Create an empty report file in the report directory; return its path."""
     # Helper kept for the lab: not called by the demo
     os.makedirs(REPORT_DIR, exist_ok=True)
-    file_descriptor, report_path = tempfile.mkstemp(suffix=".txt", dir=REPORT_DIR)
+    file_descriptor, report_path = tempfile.mkstemp(
+        suffix=".txt", dir=REPORT_DIR)
     os.close(file_descriptor)
     return report_path
 
@@ -84,10 +86,11 @@ def main():
     set_budget(5000)
     print_ledger()
     print("Totals:", total_by_category())
-    print("Remaining budget:", remaining_budget()) # after set_budget
+    print("Remaining budget:", remaining_budget())  # after set_budget
     print("Biggest expense:", biggest_expense()["note"])
     print("Sync password accepted:", check_sync_password("guess"))
-    print("Summary:", len(expenses), "expenses recorded against a budget of", budget["monthly"])
+    print("Summary:", len(expenses),
+          "expenses recorded against a budget of", budget["monthly"])
 
 
 if __name__ == "__main__":
