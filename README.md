@@ -1,55 +1,68 @@
-# Lab 5: Static Code Analysis — Personal Expense Tracker
+# Lab 5: Static Code Analysis - Personal Expense Tracker
 
-**Your file:** `expense_tracker.py`
-
-Follow the lab handout for the full instructions.
+**Name:** [your name]  
+**SRN:** [your SRN]  
+**Section:** [your section]  
+**Original repo:** https://github.com/SETAPESU26/L5_32_expense_tracker
 
 ## About the program
 
-A monthly expense tracker. It records expenses by category, rejects invalid amounts, totals spending per category, tracks the remaining budget, finds the biggest expense and checks a bank-sync password.
+`expense_tracker.py` is a monthly expense tracker. It records expenses by
+category, rejects invalid amounts, totals spending per category, tracks the
+remaining budget, finds the biggest expense and checks a bank-sync password.
 
-The code works, but only just. It has quality, style and security problems of the kind Pylint, Flake8 and Bandit are built to find.
+## How to run
 
-## What to do
+```bash
+python3 -m venv venv
+source venv/bin/activate
+python -m pip install pylint bandit flake8
+python expense_tracker.py
+```
 
-1. **Run it first** and read the output carefully:
+The bank-sync password is no longer hardcoded. It is read from the
+`BANK_SYNC_PASSWORD` environment variable. If the variable is not set, every
+password check returns `False`.
 
-   ```
-   python expense_tracker.py
-   ```
+```bash
+export BANK_SYNC_PASSWORD="your-password"
+```
 
-   It runs a short demonstration and needs no input. Note what it prints, so you can check that it still behaves the same after your fixes.
+## Running the analysis
 
-2. **Install the tools:**
+```bash
+python -m pylint expense_tracker.py > pylint_report.txt
+python -m bandit -r expense_tracker.py > bandit_report.txt
+python -m flake8 expense_tracker.py > flake8_report.txt
+```
 
-   ```
-   python -m pip install pylint bandit flake8
-   ```
+## Results
 
-3. **Run the analysis and save the reports:**
+| Tool | Before | After |
+|------|--------|-------|
+| Pylint | 5.27/10 | 10.00/10 |
+| Bandit | 4 issues (1 High, 2 Medium, 1 Low) | No issues identified |
+| Flake8 | [number from before/flake8_report.txt] warnings | 0 warnings |
 
-   ```
-   python -m pylint expense_tracker.py > pylint_report.txt
-   python -m bandit -r expense_tracker.py > bandit_report.txt
-   python -m flake8 expense_tracker.py > flake8_report.txt
-   ```
+The program output is identical before and after the changes.
 
-4. **Document the issues** in `issues.md` using this table (at least 4 rows, high and medium severity first):
+## Commits
 
-   | Issue | Type | Line(s) | Description | Fix Approach |
-   |-------|------|---------|-------------|--------------|
-   | ...   | ...  | ...     | ...         | ...          |
+| Commit | Tool | What it fixed |
+|--------|------|---------------|
+| `87d9dd9` | Bandit | `os.system` shell injection, `mktemp`, hardcoded `/tmp` path, hardcoded password |
+| `183135d` | Pylint | snake_case names, docstrings, `global` statement, broad `except`, `range(len())` loop |
+| `f5a6be8` | Flake8 | whitespace, blank lines, inline comment spacing, line length |
 
-5. **Fix the code.** Fix at least 4 of the issues you documented, then rerun all three tools to confirm they are gone. Repeat until you are satisfied. The program should still do its job when you are done.
+## Files
 
-6. **Reflect.** Answer the four reflection questions from the handout in `reflection.md`.
+- `expense_tracker.py` - the cleaned program
+- `issues.md` - the table of issues found and how each was fixed
+- `reflection.md` - reflection answers
+- `before/` - Pylint, Bandit and Flake8 reports on the original code
+- `after/` - the same reports after the fixes
 
-## Deliverables
+## What I learned
 
-- `expense_tracker.py`: your cleaned version, with at least 4 issues fixed.
-- `issues.md`: the completed issue table.
-- `reflection.md`: your answers to the reflection questions.
-
-**Target:** aim for a Pylint score above 9.5 on your final file. A perfect 10.00/10 is very good.
-
-Be ready to explain the bugs you found and how you fixed them. You may be called on to present.
+[2 to 4 sentences in your own words: which tool caught what, and one thing
+that surprised you.]
