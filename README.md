@@ -1,8 +1,11 @@
 # Lab 5: Static Code Analysis - Personal Expense Tracker
 
-**Name:** Diya B R  
+**Name:** Diya B R
+
 **SRN:** PES1UG24AM097
-**Section:** B 
+
+**Section:** B
+
 **Original repo:** https://github.com/SETAPESU26/L5_32_expense_tracker
 
 ## About the program
