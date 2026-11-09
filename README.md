@@ -1,8 +1,8 @@
 # Lab 5: Static Code Analysis - Personal Expense Tracker
 
-**Name:** [your name]  
-**SRN:** [your SRN]  
-**Section:** [your section]  
+**Name:** Diya B R  
+**SRN:** PES1UG24AM097
+**Section:** B 
 **Original repo:** https://github.com/SETAPESU26/L5_32_expense_tracker
 
 ## About the program
@@ -42,7 +42,7 @@ python -m flake8 expense_tracker.py > flake8_report.txt
 |------|--------|-------|
 | Pylint | 5.27/10 | 10.00/10 |
 | Bandit | 4 issues (1 High, 2 Medium, 1 Low) | No issues identified |
-| Flake8 | [number from before/flake8_report.txt] warnings | 0 warnings |
+| Flake8 | 4 warnings | 0 warnings |
 
 The program output is identical before and after the changes.
 
@@ -64,5 +64,10 @@ The program output is identical before and after the changes.
 
 ## What I learned
 
-[2 to 4 sentences in your own words: which tool caught what, and one thing
-that surprised you.]
+Each tool found a different kind of problem. Bandit caught the security risks
+(shell injection through `os.system`, the unsafe `mktemp` and a hardcoded
+password), Pylint caught code-quality issues such as naming, missing
+docstrings, the `global` statement and the broad `except`, and Flake8 caught
+formatting. What surprised me most was that code which ran correctly still had
+a High-severity security flaw, and that fixing one tool's findings can create
+new warnings in another, so the order of the fixes matters.
